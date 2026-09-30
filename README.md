@@ -1,18 +1,11 @@
-# AI Key Manager
+# ┌─ GigaChat API client /
 
-opkwpfk
+## ├─ Что умеет
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simple program for chatting with ai from Sberbank - GigaChat AI.
 
-## Что умеет
-jwnfow
+## ├─ How run
+ 1. install .NET 10 SDK
+ 2. Create `keys.json` in desktop-client folder, paste `{"AUTH_KEY":"your-gigachat-auth-key"}`
+ 3. `dotnet run` in desktop-client folder.
 
-## Технологии
-zzzzzz
-
-## Как запустить
-1. Установить .NET 10 SDK
-2. Скопировать `keys.example.json` в `keys.json`
-3. Вставить свои ключи
-4. `dotnet run`
-
-## Автор
-rudolf
+## └─ Author = rudolfedd
