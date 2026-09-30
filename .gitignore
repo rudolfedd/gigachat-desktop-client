@@ -1,0 +1,25 @@
+# Сборка
+desktop-client/bin/
+bin/
+desktop-client/obj/
+obj/
+
+# IDE
+.vs/
+*.user
+.idea/
+.vscode/
+
+# Секреты
+/desktop-client/keys.json
+appsettings.json
+appsettings.Development.json
+.env
+plan.md
+
+# Логи
+*.log
+
+# ОС
+.DS_Store
+Thumbs.db
