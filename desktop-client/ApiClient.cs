@@ -1,12 +1,6 @@
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
-using System.Text;
-using Microsoft.VisualBasic;
+using System.Data;using System.Diagnostics.CodeAnalysis;using Microsoft.VisualBasic;
+using System.Dynamic;using System.Net;using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;using System.Text.Json;using System.Text;
 class ApiClient
 {
       private readonly HttpClient _client;
@@ -20,7 +14,7 @@ class ApiClient
       _client = new HttpClient(handler);
       _client.DefaultRequestHeaders.Add("User-Agent", "MyApp/1.0");
 }
-      public async Task<TokenClass> GetToken(string url, HttpContent content, string AUTH_KEY)
+public async Task<TokenClass> GetToken(string url, HttpContent content, string AUTH_KEY)
       {
             var response = new HttpRequestMessage(HttpMethod.Post, url);
             response.Headers.Add("Accept","application/json");
@@ -34,12 +28,20 @@ class ApiClient
             TokenClass answer =  JsonSerializer.Deserialize<TokenClass>(json);
             return answer;
       }
-      public async Task<Message> SendMessage(string murl, string body, string token)
+      public async Task<Message> SendMessage(string murl, List<ChatMessage> history, string token)
       {
             var Messageresponse = new HttpRequestMessage(HttpMethod.Post, murl);
             Messageresponse.Headers.Add("Accept","application/json");
-            Messageresponse.Headers.Add("Authorization", $"Bearer {token}");
-            Messageresponse.Content = new StringContent(body, Encoding.UTF8, "application/json");
+            Messageresponse.Headers.Add("Authorization",$"Bearer {token}");
+            var mcontent = new
+            {
+                 model="GigaChat",
+                  messages = history,
+                  temperature = 0.7,
+                  max_tokens = 500
+            };
+            string body = JsonSerializer.Serialize(mcontent);
+            Messageresponse.Content = new StringContent(body,Encoding.UTF8,"application/json");
             var MessageresponsE = await _client.SendAsync(Messageresponse);
             var json = await MessageresponsE.Content.ReadAsStringAsync();
             Message message = JsonSerializer.Deserialize<Message>(json);
@@ -48,7 +50,7 @@ class ApiClient
       }
       public async Task<Models> GetModels(string token)
       {
-            var Modelresponse = new HttpRequestMessage(HttpMethod.Get, "https://gigachat.devices.sberbank.ru/api/v1/models");
+            var Modelresponse = new HttpRequestMessage(HttpMethod.Get,"https://gigachat.devices.sberbank.ru/api/v1/models");
             Modelresponse.Headers.Add("Accept","application/json");
             Modelresponse.Headers.Add("Authorization",$"Bearer {token}");
             var ModelresponsE = await _client.SendAsync(Modelresponse);
@@ -58,53 +60,14 @@ class ApiClient
             return models;
       }
 }
-class TokenClass
-{
-      public string access_token {get;set;}
-    public TokenClass()
-      {
-      }
-}
-class Message
-{
+class TokenClass{   public string access_token {get;set;}public TokenClass(){}}
+
+class Models{public ModelsInfo[] data {get;set;}public string json {get;set;}public Models(){}}
+class ModelsInfo{public string id {get;set;}public string type {get;set;}}
+class Message{
       public MessageData[] choices {get;set;}
       public MessageUsage usage {get;set;}
-      public string json {get;set;}
-      public Message()
-      {
-      }
-}
-class MessageData
-{
-      public ChatMessage message {get;set;}
-      
-      public MessageData()
-      {
-      }
-}
-class ChatMessage
-{
-      public string content {get;set;}
-      public string role {get;set;}
-      public ChatMessage()
-      {      
-      }
-}
-class MessageUsage
-{
-      public int prompt_tokens {get;set;}
-      public int total_tokens {get;set;}
-}
-class Models
-{
-      public ModelsInfo[] data {get;set;}
-      public string json {get;set;}
-      public Models()
-      {
-      }
-}
-public class ModelsInfo
-{
-      public string id { get; set; }
-      public string type { get; set; }
-}
+      public string json {get;set;}public Message(){}}
+class MessageData{public ChatMessage message {get;set;}public MessageData(){}}
+class ChatMessage{public string content {get;set;}public string role {get;set;}public ChatMessage(){}}
+class MessageUsage{public int prompt_tokens {get;set;}public int total_tokens {get;set;}}
