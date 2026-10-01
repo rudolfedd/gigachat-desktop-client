@@ -1,6 +1,6 @@
 # ┌─ GigaChat API client /
 
-## ├─ Что умеет
+## ├─ What is it
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simple program for chatting with ai from Sberbank - GigaChat AI.
 
 ## ├─ How run
